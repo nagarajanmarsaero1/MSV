@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mars Cam Viewer</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- MPEG-TS Player Library -->
+    <script src="https://cdn.jsdelivr.net/npm/mpegts.js@latest/dist/mpegts.min.js"></script>
+</head>
+
+<body class="viewer-page">
+    <div class="viewer-container">
+        <!-- Video Canvas for Stream -->
+        <canvas id="videoCanvas" class="video-canvas"></canvas>
+
+        <!-- Fallback Video Element for Demo Mode -->
+        <video id="videoElement" class="video-element" autoplay playsinline muted webkit-playsinline
+            style="display:none;"></video>
+
+        <!-- Loading Indicator -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="spinner"></div>
+            <p>Connecting to camera...</p>
+        </div>
+
+        <!-- Connection Status -->
+        <div class="connection-status" id="connectionStatus">
+            <i class="fas fa-circle status-indicator"></i>
+            <span id="statusText">Connecting...</span>
+        </div>
+
+        <!-- Camera Info Overlay -->
+        <div class="camera-info" id="cameraInfo">
+            <div class="info-item">
+                <i class="fas fa-network-wired"></i>
+                <span id="cameraIpDisplay"></span>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-clock"></i>
+                <span id="streamTime">00:00:00</span>
+            </div>
+        </div>
+
+        <!-- Control Buttons Overlay (Always Visible with Transparent Background) -->
+        <div class="controls-overlay" id="controlsOverlay">
+            <!-- Top Control Bar -->
+            <div class="control-bar control-bar-top">
+                <div class="recording-indicator" id="recordingIndicator" style="display:none;">
+                    <i class="fas fa-circle"></i>
+                    <span>REC</span>
+                    <span id="recordTime">00:00</span>
+                </div>
+            </div>
+
+            <!-- Main Control Bar (Bottom) -->
+            <div class="control-bar control-bar-bottom">
+
+                <!-- LEFT SIDE CONTROLS -->
+                <div class="side-controls left-panel">
+                    <!-- Play/Pause -->
+                    <button class="control-btn btn-play" id="playPauseBtn" onclick="togglePlayPause()"
+                        title="Play/Pause">
+                        <i class="fas fa-play" id="playIcon"></i>
+                        <span id="playText">Play</span>
+                    </button>
+
+                    <!-- Refresh Stream -->
+                    <button class="control-btn btn-refresh" onclick="refreshStream()" title="Refresh Stream">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Refresh</span>
+                    </button>
+
+                    <!-- Settings -->
+                    <button class="control-btn btn-settings" onclick="goToSettings()" title="Settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </button>
+                    <!-- Fullscreen Toggle -->
+                    <button class="control-btn btn-fullscreen" onclick="toggleFullscreen()" title="Fullscreen">
+                        <i class="fas fa-expand" id="fullscreenIcon"></i>
+                        <span id="fullscreenText">Fullscreen</span>
+                    </button>
+
+                </div>
+                <div class="side-controls right-panel">
+                    <!-- Zoom In -->
+                    <button class="control-btn btn-zoom" onclick="zoomIn()" title="Zoom In">
+                        <i class="fas fa-search-plus"></i>
+                        <span>Zoom In</span>
+                    </button>
+                    <!-- Zoom Stop -->
+                    <button class="control-btn btn-zoom" onclick="zoomStop()" title="Stop Zoom">
+                        <i class="fas fa-hand-paper"></i>
+                        <span>Stop</span>
+                    </button>
+                    <!-- Zoom Out -->
+                    <button class="control-btn btn-zoom" onclick="zoomOut()" title="Zoom Out">
+                        <i class="fas fa-search-minus"></i>
+                        <span>Zoom Out</span>
+                    </button>
+                    <!-- Record -->
+                    <button class="control-btn btn-record" id="recordBtn" onclick="toggleRecord()" title="Record">
+                        <i class="fas fa-circle" id="recordIcon"></i>
+                        <span id="recordText">Record</span>
+                    </button>
+
+                    <!-- Snapshot -->
+                    <button class="control-btn btn-snapshot" onclick="takeSnapshot()" title="Take Snapshot">
+                        <i class="fas fa-camera"></i>
+                        <span>Snapshot</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="notification-toast" id="notificationToast"></div>
+    </div>
+
+    <script src="js/onvif.js"></script>
+    <script src="js/stream.js"></script>
+    <script src="js/camera-control.js"></script>
+    <script src="js/viewer.js"></script>
+</body>
+
+</html>

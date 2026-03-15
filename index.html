@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mars Cam Viewer</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="welcome-page">
+    <div class="welcome-container">
+        <div class="welcome-content">
+            <div class="logo-section">
+                <i class="fas fa-video camera-icon"></i>
+            </div>
+
+            <h1 class="welcome-title">IP Camera Viewer</h1>
+            <p class="welcome-subtitle">Professional ONVIF Camera Control & Streaming</p>
+
+            <div class="features-preview">
+                <div class="feature-item">
+                    <i class="fas fa-play-circle"></i>
+                    <span>Real-time Streaming</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-search-plus"></i>
+                    <span>PTZ Control</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-record-vinyl"></i>
+                    <span>Recording</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-camera"></i>
+                    <span>Snapshots</span>
+                </div>
+            </div>
+
+            <button id="mainStartBtn" class="start-button">
+                <span>Start Viewing</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <div id="countdownText" style="margin-top: 1.5rem; color: var(--text-gray); font-size: 0.9rem;">
+                Starting automatically in <span id="seconds">5</span>s...
+            </div>
+
+            <div class="info-section">
+                <p class="info-text">
+                    <i class="fas fa-info-circle"></i>
+                    Connect to your ONVIF-compatible IP camera for full control and monitoring
+                </p>
+            </div>
+        </div>
+
+        <div class="background-animation">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            <div class="circle circle-3"></div>
+            <div class="circle circle-4"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const startBtn = document.getElementById('mainStartBtn');
+            const content = document.querySelector('.welcome-content');
+            const secondsSpan = document.getElementById('seconds');
+            let countdown = 5;
+
+            // Save default config
+            const config = {
+                cameraIp: '192.168.144.68',
+                httpPort: '80',
+                rtspUrl: 'rtsp://192.168.144.68:554',
+                username: 'admin',
+                password: 'marsaero123@'
+            };
+            localStorage.setItem('cameraConfig', JSON.stringify(config));
+
+            // Entrance animation
+            if (content) {
+                setTimeout(() => {
+                    content.classList.add('fade-in');
+                }, 100);
+            }
+
+            // Redirection logic
+            const redirectToViewer = () => {
+                if (startBtn.disabled) return;
+                startBtn.innerHTML = '<span>Connecting...</span><i class="fas fa-spinner fa-spin"></i>';
+                startBtn.disabled = true;
+                if (content) {
+                    content.style.opacity = '0';
+                    content.style.transform = 'translateY(-20px)';
+                }
+                setTimeout(() => {
+                    window.location.href = 'viewer.html';
+                }, 500);
+            };
+
+            // Manual button click
+            if (startBtn) {
+                startBtn.addEventListener('click', redirectToViewer);
+            }
+
+            // Auto-redirect countdown
+            const timer = setInterval(() => {
+                countdown--;
+                if (secondsSpan) secondsSpan.textContent = countdown;
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    redirectToViewer();
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>
